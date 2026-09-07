@@ -3,6 +3,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import sequelize from "./src/config/database.js";
+import User from "./src/models/User.js";
+import Profile from "./src/models/Profile.js";
+import Article from "./src/models/Article.js";
+import Tag from "./src/models/Tag.js";
+import ArticleTag from "./src/models/ArticleTag.js";
 
 dotenv.config();
 
