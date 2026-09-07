@@ -9,6 +9,7 @@ import Article from "./src/models/Article.js";
 import Tag from "./src/models/Tag.js";
 import ArticleTag from "./src/models/ArticleTag.js";
 import "./src/models/associations.js";
+import authRoutes from "./src/routes/auth.routes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 3000;
 
