@@ -8,6 +8,7 @@ import Profile from "./src/models/Profile.js";
 import Article from "./src/models/Article.js";
 import Tag from "./src/models/Tag.js";
 import ArticleTag from "./src/models/ArticleTag.js";
+import "./src/models/associations.js";
 
 dotenv.config();
 
