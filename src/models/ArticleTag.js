@@ -8,13 +8,24 @@ const ArticleTag = sequelize.define("ArticleTag", {
         primaryKey: true
     },
     article_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+        model: "articles",
+        key: "id"
     },
-    tag_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    }
+    onDelete: "CASCADE"
+},
+
+tag_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+        model: "tags",
+        key: "id"
+    },
+    onDelete: "CASCADE"
+}
 }, {
     tableName: "article_tags",
     timestamps: true,

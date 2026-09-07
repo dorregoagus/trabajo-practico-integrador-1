@@ -1,7 +1,13 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { register, login } from "../controllers/auth.controller.js";
-
+import {
+    register,
+    login,
+    getProfile,
+    updateProfile,
+    logout
+} from "../controllers/auth.controller.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 const router = Router();
 
 router.post(
@@ -44,5 +50,46 @@ router.post(
     ],
     login
 );
+router.get(
+    "/profile",
+    authMiddleware,
+    getProfile
+);
 
+router.put(
+    "/profile",
+    authMiddleware,
+    [
+        body("first_name")
+            .trim()
+            .isLength({ min: 2, max: 50 })
+            .withMessage("El nombre debe tener entre 2 y 50 caracteres")
+            .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+            .withMessage("El nombre solo puede contener letras"),
+
+        body("last_name")
+            .trim()
+            .isLength({ min: 2, max: 50 })
+            .withMessage("El apellido debe tener entre 2 y 50 caracteres")
+            .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+            .withMessage("El apellido solo puede contener letras"),
+
+        body("biography")
+            .optional()
+            .isLength({ max: 500 })
+            .withMessage("La biografía no puede superar los 500 caracteres"),
+
+        body("avatar_url")
+            .optional()
+            .isURL()
+            .withMessage("El avatar debe ser una URL válida")
+    ],
+    updateProfile
+);
+
+router.post(
+    "/logout",
+    authMiddleware,
+    logout
+);
 export default router;

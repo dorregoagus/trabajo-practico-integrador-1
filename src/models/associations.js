@@ -33,14 +33,16 @@ Article.belongsToMany(Tag, {
     through: ArticleTag,
     foreignKey: "article_id",
     otherKey: "tag_id",
-    as: "tags"
+    as: "tags",
+    onDelete: "CASCADE"
 });
 
 Tag.belongsToMany(Article, {
     through: ArticleTag,
     foreignKey: "tag_id",
     otherKey: "article_id",
-    as: "articles"
+    as: "articles",
+    onDelete: "CASCADE"
 });
 
 export {
@@ -50,3 +52,24 @@ export {
     Tag,
     ArticleTag
 };
+Article.hasMany(ArticleTag, {
+    foreignKey: "article_id",
+    as: "articleTags",
+    onDelete: "CASCADE"
+});
+
+ArticleTag.belongsTo(Article, {
+    foreignKey: "article_id",
+    as: "article"
+});
+
+Tag.hasMany(ArticleTag, {
+    foreignKey: "tag_id",
+    as: "articleTags",
+    onDelete: "CASCADE"
+});
+
+ArticleTag.belongsTo(Tag, {
+    foreignKey: "tag_id",
+    as: "tag"
+});

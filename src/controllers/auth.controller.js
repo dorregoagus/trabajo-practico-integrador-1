@@ -15,7 +15,7 @@ const register = async (req, res) => {
             });
         }
 
-        const { username, email, password, role } = req.body;
+        const { username, email, password } = req.body;
 
         const existingUsername = await User.findOne({
             where: { username }
@@ -43,7 +43,7 @@ const register = async (req, res) => {
             username,
             email,
             password: hashedPassword,
-            role: role || "user"
+            role: "user"
         });
 
         await Profile.create({
@@ -132,5 +132,121 @@ const login = async (req, res) => {
         });
     }
 };
+const getProfile = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id, {
+            include: {
+                model: Profile,
+                as: "profile"
+            }
+        });
 
-export { register, login };
+        if (!user) {
+            return res.status(404).json({
+                message: "Usuario no encontrado"
+            });
+        }
+
+        return res.status(200).json({
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                profile: user.profile
+            }
+        });
+
+    } catch (error) {
+        console.error("Error al obtener el perfil:", error);
+
+        return res.status(500).json({
+            message: "Error interno del servidor"
+        });
+    }
+};
+
+const updateProfile = async (req, res) => {
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: "Error de validación",
+                errors: errors.array()
+            });
+        }
+
+        const user = await User.findByPk(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Usuario no encontrado"
+            });
+        }
+
+        const profile = await Profile.findOne({
+            where: {
+                user_id: req.user.id
+            }
+        });
+
+        if (!profile) {
+            return res.status(404).json({
+                message: "Perfil no encontrado"
+            });
+        }
+
+        const {
+            first_name,
+            last_name,
+            biography,
+            avatar_url,
+            birth_date
+        } = req.body;
+
+        await profile.update({
+            first_name,
+            last_name,
+            biography,
+            avatar_url,
+            birth_date
+        });
+
+        return res.status(200).json({
+            message: "Perfil actualizado correctamente",
+            profile
+        });
+
+    } catch (error) {
+        console.error("Error al actualizar el perfil:", error);
+
+        return res.status(500).json({
+            message: "Error interno del servidor"
+        });
+    }
+};
+
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("authToken");
+
+        return res.status(200).json({
+            message: "Sesión cerrada correctamente"
+        });
+
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+
+        return res.status(500).json({
+            message: "Error interno del servidor"
+        });
+    }
+};
+export {
+    register,
+    login,
+    getProfile,
+    updateProfile,
+    logout
+};
