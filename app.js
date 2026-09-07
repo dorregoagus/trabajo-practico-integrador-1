@@ -14,6 +14,7 @@ import authMiddleware from "./src/middlewares/authMiddleware.js";
 import adminMiddleware from "./src/middlewares/adminMiddleware.js";
 import userRoutes from "./src/routes/user.routes.js";
 import tagRoutes from "./src/routes/tag.routes.js";
+import articleRoutes from "./src/routes/article.routes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tags", tagRoutes);
+app.use("/api/articles", articleRoutes);
 
 const PORT = process.env.PORT || 3000;
 
