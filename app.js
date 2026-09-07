@@ -13,6 +13,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import authMiddleware from "./src/middlewares/authMiddleware.js";
 import adminMiddleware from "./src/middlewares/adminMiddleware.js";
 import userRoutes from "./src/routes/user.routes.js";
+import tagRoutes from "./src/routes/tag.routes.js";
 
 dotenv.config();
 
@@ -27,11 +28,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/tags", tagRoutes);
 
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
-    try {
+    try { 
         await sequelize.authenticate();
 
         console.log("Conexión a la base de datos establecida");
