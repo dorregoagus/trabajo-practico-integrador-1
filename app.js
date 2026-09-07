@@ -12,6 +12,7 @@ import "./src/models/associations.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import authMiddleware from "./src/middlewares/authMiddleware.js";
 import adminMiddleware from "./src/middlewares/adminMiddleware.js";
+import userRoutes from "./src/routes/user.routes.js";
 
 dotenv.config();
 
@@ -25,20 +26,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
-
-app.get("/api/test-auth", authMiddleware, (req, res) => {
-    res.status(200).json({
-        message: "Autenticación correcta",
-        user: req.user
-    });
-});
-
-app.get("/api/test-admin", authMiddleware, adminMiddleware, (req, res) => {
-    res.status(200).json({
-        message: "Autorización de administrador correcta",
-        user: req.user
-    });
-});
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 3000;
 
